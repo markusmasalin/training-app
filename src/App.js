@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import TrainingList from './components/TrainingList'
+import CustomerList from './components/CustomerList'
 import './App.css';
 import 'typeface-roboto';
 import moment from 'moment'
@@ -68,21 +69,29 @@ const useStyles = makeStyles(theme => ({
 
 function App() {
   const [trainings, setTrainings] = useState([]);
+  const [customers, setCustomers] = useState([]);
 
-  useEffect(() => fetchData() , []);
+  useEffect(() => fetchTrainings() , []);
+  useEffect(() => fetchCustomers() , []);
   
   
   
   console.log(trainings)
+  console.log(customers)
 
-  const fetchData = () => {
+  const fetchTrainings = () => {
     fetch('https://customerrest.herokuapp.com/gettrainings')
     .then(response => response.json())
     .then(d => setTrainings(d))
   
-    
   }
-  const classes = useStyles();
+
+  const fetchCustomers = () => {
+    fetch('https://customerrest.herokuapp.com/api/customers')
+    .then(response => response.json())
+    .then(d => setCustomers(d.content))
+  }
+
 
   
   return (
@@ -124,6 +133,22 @@ function App() {
     >
       
     </TrainingList>
+    <CustomerList
+     data={customers}
+     columns={[
+        { title: 'First name', field: 'firstname' },
+        { title: 'Last Name', field: 'lastname' },
+        { title: 'Email', field: 'email' },
+        { title: 'Phone', field: 'phone' },
+        { title: 'Address', field: 'streetaddress'},
+        { title: 'Postcode', field: 'postcode'},
+        { title: 'City', field: 'city'},
+        
+      ]
+     }
+    >
+      
+    </CustomerList>
    </div>
   );
 }
