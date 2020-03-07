@@ -70,6 +70,7 @@ const useStyles = makeStyles(theme => ({
 function App() {
   const [trainings, setTrainings] = useState([]);
   const [customers, setCustomers] = useState([]);
+  
 
   useEffect(() => fetchTrainings() , []);
   useEffect(() => fetchCustomers() , []);
@@ -91,6 +92,77 @@ function App() {
     .then(response => response.json())
     .then(d => setCustomers(d.content))
   }
+
+  const deleteCustomer = (id) => {
+    console.log(id.links[0].href)
+    fetch(id.links[0].href, {method: 'DELETE'})
+    .then( res => fetchCustomers())
+    .catch(err => console.error(err))
+    }
+
+  const createCustomer = (customer) => {
+    console.log(customer, 'customer')
+    fetch('https://customerrest.herokuapp.com/api/customers', {
+      method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(customer)
+    })
+    .then( res => fetchCustomers())
+    .catch(err => console.error(err))
+    }
+
+    const editCustomer = (customer) => {
+      console.log(customer.links[0].href)
+      fetch(customer.links[0].href, {
+        method: 'PUT',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(customer)
+      })
+      .then( res => fetchCustomers())
+      .catch(err => console.error(err))
+      }
+  
+
+
+  const saveTraining = (training) => {
+    
+    const trainings = {
+      "date":  `${training.date}T${training.time}:00.000+0000`,
+    
+      "activity": training.activity,
+      "duration": training.duration,
+      "customer": training.customer
+    }
+
+    console.log(trainings, 'trainings')
+    fetch(`https://customerrest.herokuapp.com/api/trainings`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(trainings)
+      })
+      .then(res => fetchTrainings())
+      .catch(err => console.error(err))
+    
+    }
+
+    const deleteTraining = (t) => {
+      console.log(t.id)
+      fetch(`https://customerrest.herokuapp.com/api/trainings/${t.id}`, {
+        method: 'DELETE',
+      })
+      .then( res => fetchTrainings())
+      .catch(err => console.error(err))
+      }
+
+    
+
+  
 
 
   
@@ -115,6 +187,8 @@ function App() {
   
     <TrainingList
      data={trainings}
+     deleteTraining={deleteTraining}
+     
      columns={[
         { title: 'Activity', field: 'activity' },
         { title: 'Date', field: 'date',
@@ -135,17 +209,12 @@ function App() {
     </TrainingList>
     <CustomerList
      data={customers}
-     columns={[
-        { title: 'First name', field: 'firstname' },
-        { title: 'Last Name', field: 'lastname' },
-        { title: 'Email', field: 'email' },
-        { title: 'Phone', field: 'phone' },
-        { title: 'Address', field: 'streetaddress'},
-        { title: 'Postcode', field: 'postcode'},
-        { title: 'City', field: 'city'},
-        
-      ]
-     }
+     deteleCustomer={deleteCustomer}
+     saveTraining={saveTraining}
+     createCustomer={createCustomer}
+     deleteCustomer={deleteCustomer}
+     editCustomer={editCustomer}
+     
     >
       
     </CustomerList>
