@@ -8,7 +8,7 @@ import ChevronLeft from '@material-ui/icons/ChevronLeft'
 import ChevronRight from '@material-ui/icons/ChevronRight'
 import FirstPage from '@material-ui/icons/FirstPage'
 import LastPage from '@material-ui/icons/LastPage'
-
+import moment from 'moment'
 import Check from '@material-ui/icons/Check'
 import FilterList from '@material-ui/icons/FilterList'
 import Remove from '@material-ui/icons/Remove'
@@ -22,7 +22,6 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 
 const TrainingList = ({
    data, 
-   columns, 
    deleteTraining
   
   }) => {
@@ -37,7 +36,21 @@ const TrainingList = ({
       </div>
     )
   }
-
+  const columns = [
+    { title: 'Activity', field: 'activity' },
+    { title: 'Date', field: 'date',
+ render: rowData => <p>{moment(rowData.date, ).format('DD.MM.YYYY ')}{moment(rowData.date).format('LT')}</p>
+  },
+    { title: 'Duration', field: 'duration', type: 'numeric' },
+    {
+      title: 'Customer',
+      field: 'customer.lastname',
+      render: rowData => <p>{rowData.customer.firstname} {rowData.customer.lastname}</p>
+      
+     
+    },
+  ]
+ 
     
   return (
     <MaterialTable

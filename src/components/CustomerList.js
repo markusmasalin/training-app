@@ -102,7 +102,8 @@ const CustomerList = ({
   return (
     <div>
     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">New Training</DialogTitle>
+    
+       <DialogTitle  id="form-dialog-title">New Training</DialogTitle>
         <DialogContent>
         
         <TextField
