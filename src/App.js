@@ -36,6 +36,8 @@ import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
 import PersonIcon from '@material-ui/icons/Person';
 import moment from 'moment'
 
+import 'react-big-calendar/lib/css/react-big-calendar.css'
+
 const drawerWidth = 240;
 
 
@@ -186,18 +188,21 @@ function App() {
     }
     
   const events = trainings.map(d => {
-        const date = new Date(d.date);
-        const changedDate = date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
-        const changedTime = date.getHours()
+        
+        const changedTime = moment(d.date).add(d.duration, 'm').subtract(2, 'h')
+
+        const timeIso = moment(changedTime._d).format('YYYY-MM-DD[T]HH:mm:ss')
         console.log(changedTime, 'changedTime')
-        console.log(changedDate, 'changedDate')
-        const endTime = moment(d.date).add(60, 'm')
-        console.log(endTime, 'endTime')
+        console.log(timeIso, 'timeIso')
+        
         const newObject = {
         title: d.activity,
         start: d.date,
-        end: moment(d.date).add(60, 'm').toISOString,
+        end: timeIso + ".000+0000",
+        allDay: false,
+        resource: []
         }
+        console.log(newObject, 'newObject')
         return newObject
   })
 
@@ -354,18 +359,18 @@ function App() {
                 />
                <Route path="/calendar" 
                 render={() => <Calendar
-                  views={allViews}
+                  selectable
                   localizer={localizer}
-                  defaultDate={new Date()}
-                  defaultView="week"
                   events={events}
-                  components={{
-                    timeSlotWrapper: ColoredDateCellWrapper,
-                  }}
-                  drilldownView="agenda"
-                  
+                  title={trainings.activity} 
+                  views={['month', 'week','day', 'agenda']}
                   step={60}
                   showMultiDayTimes
+                  defaultDate={new Date()}
+                  
+                  
+                  
+                  
                 />}
                 />
               <Route render={() => <h1>Page not found</h1>}/>
