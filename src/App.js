@@ -362,11 +362,12 @@ function App() {
                   selectable
                   localizer={localizer}
                   events={events}
-                  title={trainings.activity} 
+        
                   views={['month', 'week','day', 'agenda']}
                   step={60}
                   showMultiDayTimes
                   defaultDate={new Date()}
+
                   
                   
                   
