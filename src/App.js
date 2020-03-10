@@ -189,19 +189,23 @@ function App() {
     
   const events = trainings.map(d => {
         
-        const changedTime = moment(d.date).add(d.duration, 'm').subtract(2, 'h')
-
-        const timeIso = moment(changedTime._d).format('YYYY-MM-DD[T]HH:mm:ss')
+        const changedTime = moment(d.date).add(d.duration, 'm')
+       
+        const startTime = moment(d.date).add(2, 'ms')
+        console.log(startTime, 'startMont')
+        //const timeIso = moment(changedTime._d).format('YYYY-MM-DD[T]HH:mm:ss')
         console.log(changedTime, 'changedTime')
-        console.log(timeIso, 'timeIso')
+
         
         const newObject = {
         title: d.activity,
-        start: d.date,
-        end: timeIso + ".000+0000",
-        allDay: false,
-        resource: []
+        start: startTime._d,
+        end: changedTime._d,
+       
+        
+
         }
+        
         console.log(newObject, 'newObject')
         return newObject
   })
@@ -359,13 +363,13 @@ function App() {
                 />
                <Route path="/calendar" 
                 render={() => <Calendar
-                  selectable
+                  
                   localizer={localizer}
                   events={events}
+                  
         
                   views={['month', 'week','day', 'agenda']}
-                  step={60}
-                  showMultiDayTimes
+                  style={{ height: 500,width: '95%' }}
                   defaultDate={new Date()}
 
                   
